@@ -1,0 +1,80 @@
+﻿<Window x:Class="Erasmus.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Erasmus"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=local:EmailClientViewModel}"
+        Title="Email Client" Height="700" MinWidth="900" MinHeight="500"
+        Style="{StaticResource WindowStyle}">
+
+    <Window.Resources>
+        <DataTemplate x:Key="EmailTemplate">
+            <StackPanel Orientation="Vertical" Style="{StaticResource StackPanelStyle}" >
+                <TextBlock Text="{Binding Subject}" FontWeight="Bold"/>
+                <TextBlock Text="{Binding Sender}"/>
+                <TextBlock Text="{Binding Category}"/>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+
+    <DockPanel LastChildFill="True">
+        <!-- Menu Item -->
+        <Menu DockPanel.Dock="Top" Style="{StaticResource MenuStyle}">
+            <MenuItem Header="File" Style="{StaticResource MenuItemStyle}">
+                <MenuItem Header="Settings" Command="{Binding OpenSettingsCommand}" Style="{StaticResource MenuItemStyle}"/>
+                <MenuItem Header="Import" Command="{Binding ImportCommand}" Style="{StaticResource MenuItemStyle}"/>
+                <MenuItem Header="Export" Command="{Binding ExportCommand}" Style="{StaticResource MenuItemStyle}"/>
+                <MenuItem Header="Exit" Click="Exit_Click" Style="{StaticResource MenuItemStyle}"/>
+            </MenuItem>
+            <MenuItem Header="Message" Style="{StaticResource MenuItemStyle}">
+                <MenuItem Header="New" Command="{Binding AddEmailCommand}" Style="{StaticResource MenuItemStyle}"/>
+                <MenuItem Header="Edit" Command="{Binding EditEmailCommand}" Style="{StaticResource MenuItemStyle}"/>
+                <MenuItem Header="Delete" Command="{Binding RemoveEmailCommand}" Style="{StaticResource MenuItemStyle}"/>
+            </MenuItem>
+            <MenuItem Header="View" Style="{StaticResource MenuItemStyle}">
+                <MenuItem Header="Default Layout" Click="DefaultLayout_Click" Style="{StaticResource MenuItemStyle}"/>
+                <MenuItem Header="Alternative Layout" Click="AlternativeLayout_Click" Style="{StaticResource MenuItemStyle}"/>
+            </MenuItem>
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom" Style="{StaticResource StatusBarStyle}">
+            Status Bar
+        </StatusBar>
+        <ToolBarTray DockPanel.Dock="Bottom" IsLocked="True">
+            <ToolBar>
+                <Button ToolTip="Reply" Content="Reply" Style="{StaticResource ButtonStyle}"/>
+                <Button ToolTip="Reply All" Content="Reply All" Style="{StaticResource ButtonStyle}"/>
+                <Button ToolTip="Forward" Content="Forward" Style="{StaticResource ButtonStyle}"/>
+                <Button ToolTip="Delete" Command="{Binding RemoveEmailCommand}" Content="Delete" Style="{StaticResource ButtonStyle}"/>
+                <Button ToolTip="New Message" Command="{Binding AddEmailCommand}" Content="New Message" Style="{StaticResource ButtonStyle}"/>
+            </ToolBar>
+        </ToolBarTray>
+        <Grid DockPanel.Dock="Left" MinWidth="200">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <local:EmailSearchControl x:Name="emailSearchControl" VerticalAlignment="Center" SearchChanged="EmailSearchControl_SearchChanged" Loaded="EmailSearchControl_Loaded" Margin="0,0,11,0"/>
+            <TreeView SelectedItemChanged="TreeView_SelectedItemChanged" Grid.Row="1"
+          Style="{StaticResource CustomTreeViewStyle}" 
+          ItemContainerStyle="{StaticResource CustomTreeViewItemStyle}">
+                <TreeViewItem Header="Personal Mailbox" Tag="Personal">
+                    <TreeViewItem Header="Inbox" Tag="Inbox"/>
+                    <TreeViewItem Header="Sent Messages" Tag="Sent"/>
+                    <TreeViewItem Header="Drafts" Tag="Drafts"/>
+                    <TreeViewItem Header="Trash" Tag="Trash"/>
+                </TreeViewItem>
+                <TreeViewItem Header="Work Mailbox" Tag="Work">
+                    <TreeViewItem Header="Inbox" Tag="Inbox"/>
+                    <TreeViewItem Header="Sent Messages" Tag="Sent"/>
+                    <TreeViewItem Header="Drafts" Tag="Drafts"/>
+                    <TreeViewItem Header="Trash" Tag="Trash"/>
+                </TreeViewItem>
+            </TreeView>
+
+        </Grid>
+        <ContentControl x:Name="MainContent"/>
+    </DockPanel>
+</Window>
+  
